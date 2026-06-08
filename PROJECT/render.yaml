@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: hair-tryon-api
+    runtime: python
+    plan: standard
+    region: singapore
+    rootDir: backend
+    buildCommand: bash build.sh
+    startCommand: LD_LIBRARY_PATH=/opt/render/project/src/backend/libs:/usr/local/lib:$LD_LIBRARY_PATH uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+    disk:
+      name: hair-tryon-data
+      mountPath: /data
+      sizeGB: 1
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: MODELS_DIR
+        value: /data/models
+      - key: MEDIAPIPE_DISABLE_GPU
+        value: "1"
+      - key: LIBGL_ALWAYS_SOFTWARE
+        value: "1"
+      - key: ALLOWED_ORIGINS
+        value: https://tranbnb-hairtryon.vercel.app,http://localhost:8081,http://localhost:19006
